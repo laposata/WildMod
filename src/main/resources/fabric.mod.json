@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "wildmod_copper",
   "version": "${version}",
 
   "name": "Example Mod",
@@ -14,16 +14,15 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.fabricmc.wildmod.WildModCopper"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "wildmod_copper.mixins.json"
   ],
 
   "depends": {

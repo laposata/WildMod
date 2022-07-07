@@ -1,12 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.fabricmc.example.mixin",
+  "package": "net.fabricmc.wildmod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractRedstoneGateMixin",
+    "RedstoneWireMixin"
   ],
   "client": [
-    "ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

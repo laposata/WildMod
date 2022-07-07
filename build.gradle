@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.matthewprenger.cursegradle' version '<VERSION>'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -16,6 +17,12 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven {
+		url = uri("https://storage.googleapis.com/devan-maven/")
+		// for 0.4.2 and older
+		// url uri("https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/")
+	}
+
 }
 
 dependencies {
@@ -31,12 +38,13 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+	 modImplementation("net.devtech:arrp:0.+")
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	filesMatching("copper/fabric.mod.json") {
 		expand "version": project.version
 	}
 }
@@ -73,5 +81,19 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+curseforge {
+	apiKey = System.getenv("apikey")
+	project {
+		id = '12345'
+		changelog = 'Some changes'
+		releaseType = 'alpha'
+		addGameVersion '1.12.2'
+
+		mainArtifact(jar) {
+			displayName = "MyMod version: $project.version"
+		}
 	}
 }
