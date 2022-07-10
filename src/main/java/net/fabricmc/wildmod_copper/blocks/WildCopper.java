@@ -98,13 +98,13 @@ public class WildCopper{
 
 
     static {
-        COLORS = (Vec3d[]) Util.make(new Vec3d[16], (vec3ds) -> {
+        COLORS = Util.make(new Vec3d[16], (vec3ds) -> {
             for (int i = 0; i <= 15; ++i) {
                 float f = (float) i / 15.0F;
                 float g = f * 0.6F + (f > 0.0F ? 0.4F : 0.3F);
                 float h = MathHelper.clamp(f * f * 0.7F - 0.5F, 0.0F, 1.0F);
                 float j = MathHelper.clamp(f * f * 0.6F - 0.7F, 0.0F, 1.0F);
-                vec3ds[i] = new Vec3d((double) g, (double) h, (double) j);
+                vec3ds[i] = new Vec3d(g, h, j);
             }
         });
     }

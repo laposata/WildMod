@@ -12,6 +12,10 @@
   "client": [
   ],
   "injectors": {
+    "namespace": "wildmod_copper",
+    "injectionPoints": [
+      "net.fabricmc.wildmod_copper.mixin.injectorPoints.NEWFIELD"
+    ],
     "defaultRequire": 1
   }
 }
