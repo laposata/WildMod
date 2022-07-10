@@ -3,22 +3,20 @@
   "id": "wildmod_copper",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "WildMod: Copper",
+  "description": "Part 1 of a larger project, this introduces conductive properties to copper",
   "authors": [
-    "Me!"
+    "ToxxicGlitter"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/laposata/WildMod"
   },
-
-  "license": "CC0-1.0",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.wildmod.WildModCopper"
+      "net.fabricmc.wildmod_copper.WildModCopper"
     ]
   },
   "mixins": [

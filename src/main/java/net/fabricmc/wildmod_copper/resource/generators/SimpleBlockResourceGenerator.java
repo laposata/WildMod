@@ -1,4 +1,4 @@
-package net.fabricmc.wildmod.resource.generators;
+package net.fabricmc.wildmod_copper.resource.generators;
 
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.blockstate.JState;

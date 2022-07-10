@@ -1,4 +1,4 @@
-package net.fabricmc.wildmod.registry;
+package net.fabricmc.wildmod_copper.registry;
 
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.tags.JTag;
@@ -7,16 +7,8 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import static net.fabricmc.wildmod.WildModCopper.NAMESPACE;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WAXED_WILD_COPPER;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WAXED_WILD_COPPER_EXPOSED;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WAXED_WILD_COPPER_OXIDIZED;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WAXED_WILD_COPPER_WEATHERED;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WILD_COPPER;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WILD_COPPER_EXPOSED;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WILD_COPPER_OXIDIZED;
-import static net.fabricmc.wildmod.registry.BlockRegistry.WILD_COPPER_WEATHERED;
-import static net.fabricmc.wildmod.utils.TagUtils.createTag;
+import static net.fabricmc.wildmod_copper.WildModCopper.NAMESPACE;
+import static net.fabricmc.wildmod_copper.utils.TagUtils.createTag;
 import static net.minecraft.block.Blocks.*;
 
 
@@ -34,14 +26,14 @@ public class Tags {
     private static void setChargeableCopper(RuntimeResourcePack pack){
         pack.addTag(new Identifier(NAMESPACE, "blocks/" + chargeable_copper),
               new JTag()
-                    .add(Registry.BLOCK.getId(WILD_COPPER))
-                    .add(Registry.BLOCK.getId(WILD_COPPER_EXPOSED))
-                    .add(Registry.BLOCK.getId(WILD_COPPER_WEATHERED))
-                    .add(Registry.BLOCK.getId(WILD_COPPER_OXIDIZED))
-                    .add(Registry.BLOCK.getId(WAXED_WILD_COPPER))
-                    .add(Registry.BLOCK.getId(WAXED_WILD_COPPER_EXPOSED))
-                    .add(Registry.BLOCK.getId(WAXED_WILD_COPPER_WEATHERED))
-                    .add(Registry.BLOCK.getId(WAXED_WILD_COPPER_OXIDIZED)));
+                    .add(Registry.BLOCK.getId(COPPER_BLOCK))
+                    .add(Registry.BLOCK.getId(EXPOSED_COPPER))
+                    .add(Registry.BLOCK.getId(WEATHERED_COPPER))
+                    .add(Registry.BLOCK.getId(OXIDIZED_COPPER))
+                    .add(Registry.BLOCK.getId(WAXED_COPPER_BLOCK))
+                    .add(Registry.BLOCK.getId(WAXED_EXPOSED_COPPER))
+                    .add(Registry.BLOCK.getId(WAXED_WEATHERED_COPPER))
+                    .add(Registry.BLOCK.getId(WAXED_OXIDIZED_COPPER)));
 
     }
 

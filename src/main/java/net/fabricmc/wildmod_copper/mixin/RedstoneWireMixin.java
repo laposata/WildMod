@@ -1,6 +1,6 @@
-package net.fabricmc.wildmod.mixin;
+package net.fabricmc.wildmod_copper.mixin;
 
-import net.fabricmc.wildmod.utils.TagUtils;
+import net.fabricmc.wildmod_copper.utils.TagUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.util.math.Direction;
@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.fabricmc.wildmod.registry.Tags.CHARGEABLE_COPPER;
-import static net.fabricmc.wildmod.registry.Tags.CONDUCTS_COPPER;
+import static net.fabricmc.wildmod_copper.registry.Tags.CHARGEABLE_COPPER;
+import static net.fabricmc.wildmod_copper.registry.Tags.CONDUCTS_COPPER;
 import static net.minecraft.block.Blocks.REDSTONE_WIRE;
 
 @Mixin(RedstoneWireBlock.class)

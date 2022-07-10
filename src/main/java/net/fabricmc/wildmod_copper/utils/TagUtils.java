@@ -1,4 +1,4 @@
-package net.fabricmc.wildmod.utils;
+package net.fabricmc.wildmod_copper.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.tag.TagKey;

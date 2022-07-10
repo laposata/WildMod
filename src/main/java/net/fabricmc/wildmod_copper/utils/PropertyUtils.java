@@ -1,6 +1,6 @@
-package net.fabricmc.wildmod.utils;
+package net.fabricmc.wildmod_copper.utils;
 
-import net.fabricmc.wildmod.blocks.WildCopper;
+import net.fabricmc.wildmod_copper.blocks.WildCopper;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;

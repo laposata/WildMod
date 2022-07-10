@@ -1,10 +1,10 @@
-package net.fabricmc.wildmod;
+package net.fabricmc.wildmod_copper;
 
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.fabricmc.wildmod.registry.BlockRegistry.registerBlocks;
+import static net.fabricmc.wildmod_copper.registry.BlockRegistry.registerBlocks;
 
 public class WildModCopper implements ModInitializer {
 	// This logger is used to write text to the console and the log file.

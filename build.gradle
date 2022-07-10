@@ -1,7 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
-	id 'com.matthewprenger.cursegradle' version '<VERSION>'
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -44,7 +44,7 @@ dependencies {
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("copper/fabric.mod.json") {
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
 }
@@ -84,16 +84,16 @@ publishing {
 	}
 }
 
-curseforge {
-	apiKey = System.getenv("apikey")
-	project {
-		id = '12345'
-		changelog = 'Some changes'
-		releaseType = 'alpha'
-		addGameVersion '1.12.2'
-
-		mainArtifact(jar) {
-			displayName = "MyMod version: $project.version"
-		}
-	}
-}
+//curseforge {
+//	apiKey = System.getenv("apikey")
+//	project {
+//		id = '641024'
+//		changelog = 'Initial commit'
+//		releaseType = 'alpha'
+//		addGameVersion '1.19.2'
+//
+//		mainArtifact(jar) {
+//			displayName = "WildMod Copper: $project.version"
+//		}
+//	}
+//}
