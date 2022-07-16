@@ -1,4 +1,4 @@
-package net.fabricmc.wildmod_copper.resource.generators;
+package net.fabricmc.wildmod_copper.utils.resource.generators;
 
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.devtech.arrp.json.blockstate.JState;
@@ -20,7 +20,7 @@ public class SimpleBlockResourceGenerator {
   private Identifier id;
   private Identifier model;
 
-  SimpleBlockResourceGenerator(RuntimeResourcePack pack) {
+  public SimpleBlockResourceGenerator(RuntimeResourcePack pack) {
     this.pack = pack;
   }
 

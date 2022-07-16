@@ -14,8 +14,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 import static net.fabricmc.wildmod_copper.registry.Tags.CHARGEABLE_COPPER;
 import static net.fabricmc.wildmod_copper.registry.Tags.CONDUCTS_COPPER;
@@ -29,6 +28,13 @@ public class WildCopper{
     public static final IntProperty CHARGE = IntProperty.of("charge", 0, 15);
     public static final BooleanProperty WET = BooleanProperty.of("wet");
 
+    public static final Map<Oxidizable.OxidationLevel, Set<Block>> byLevel = new HashMap<>();
+
+    public static void registerOxidizable(Block block, Oxidizable.OxidationLevel level){
+        Set<Block> set = WildCopper.byLevel.getOrDefault(level, new HashSet<>());
+        set.add(block);
+        WildCopper.byLevel.put(level, set);
+    }
     public static int getRedstonePowerLevelForGates(BlockState self, BlockState consumer){
         int i = charged(self);
         if(i == 0){
