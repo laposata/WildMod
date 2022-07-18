@@ -1,6 +1,5 @@
 package net.fabricmc.wildmod_copper.mixin;
 
-import com.google.common.collect.Sets;
 import net.fabricmc.wildmod_copper.blocks.WildCopper;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
@@ -11,27 +10,18 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import static net.fabricmc.wildmod_copper.blocks.WildCopper.*;
-import static net.fabricmc.wildmod_copper.registry.Tags.CHARGEABLE_COPPER;
-import static net.fabricmc.wildmod_copper.registry.Tags.CONDUCTS_COPPER;
 import static net.fabricmc.wildmod_copper.utils.PropertyUtils.charged;
-import static net.fabricmc.wildmod_copper.utils.TagUtils.blockIsIn;
-import static net.minecraft.block.Blocks.AIR;
 
 @Mixin(OxidizableBlock.class)
 public class OxidizableMixin extends Block {
-  @Shadow @Final private Oxidizable.OxidationLevel oxidationLevel;
-  private boolean placedAdjacent = false;
 
   private OxidizableMixin(Settings settings) {
     super(settings);
@@ -52,12 +42,9 @@ public class OxidizableMixin extends Block {
   public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
     int i = state.get(CHARGE);
     if (i != 0) {
-
       for (Direction direction : Direction.Type.HORIZONTAL) {
         WildCopper.addPoweredParticles(world, random, pos, WildCopper.COLORS[i], direction, Direction.UP, -0.5F, 0.5F);
-
       }
-
     }
   }
 
@@ -68,58 +55,15 @@ public class OxidizableMixin extends Block {
 
   @Override
   public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-    BlockState otherState = world.getBlockState(pos.offset(direction.getOpposite()));
-    Block other = otherState.getBlock();
-    if (otherState.isOf(AIR)) {
-      placedAdjacent = true;
-    }
-    if (blockIsIn(other, CONDUCTS_COPPER) || blockIsIn(other, CHARGEABLE_COPPER)) {
-      return charged(state);
-    }
-    return 0;
+    return WildCopper.getWeakRedstonePower(state, world, pos, direction);
   }
-
 
   public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
     return 0;
   }
 
   public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-    if (!world.isClient) {
-      if (state.canPlaceAt(world, pos)) {
-        placedAdjacent = !blockIsIn(sourceBlock, CHARGEABLE_COPPER);
-        this.update(world, pos, state);
-      } else {
-        dropStacks(state, world, pos);
-        world.removeBlock(pos, false);
-      }
-
-    }
-  }
-
-
-  private void update(World world, BlockPos pos, BlockState state) {
-    int i = WildCopper.getReceivedRedstonePower(world, pos);
-    if (charged(state) != i) {
-      if (world.getBlockState(pos) == state) {
-        world.setBlockState(pos, state.with(CHARGE, i), 2);
-      }
-    }
-    if (placedAdjacent) {
-      boolean wet = checkIfWet(pos, world);
-      if (wet != state.get(WET)) {
-        world.setBlockState(pos, state.with(WET, wet), 2);
-      }
-      Set<BlockPos> set = Sets.newHashSet();
-      set.add(pos);
-      for (Direction direction : Direction.values()) {
-        set.add(pos.offset(direction));
-      }
-      for (BlockPos blockPos : set) {
-        world.updateNeighborsAlways(blockPos, this);
-      }
-      placedAdjacent = false;
-    }
+    WildCopper.neighborUpdate(state, world, pos, sourceBlock, sourcePos);
   }
 
   public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -202,7 +146,7 @@ public class OxidizableMixin extends Block {
     }
     if (random.nextFloat() < f) {
       this.tryDegrade(state, world, pos, random);
-      this.update(world, pos, state);
+      WildCopper.update(world, pos, state);
     }
   }
 

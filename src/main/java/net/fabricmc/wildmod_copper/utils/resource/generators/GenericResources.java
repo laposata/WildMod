@@ -6,8 +6,11 @@ import net.devtech.arrp.json.recipe.JIngredients;
 import net.devtech.arrp.json.recipe.JKeys;
 import net.devtech.arrp.json.recipe.JPattern;
 import net.devtech.arrp.json.tags.JTag;
+import net.fabricmc.wildmod_copper.utils.TagUtils;
 import net.minecraft.item.Item;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.tag.TagBuilder;
+import net.minecraft.tag.TagEntry;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -20,7 +23,6 @@ import static net.devtech.arrp.json.recipe.JRecipe.shapeless;
 import static net.devtech.arrp.json.recipe.JResult.stackedResult;
 import static net.fabricmc.wildmod_copper.WildModCopper.MINECRAFT_NAMESPACE;
 import static net.fabricmc.wildmod_copper.WildModCopper.NAMESPACE;
-import static net.fabricmc.wildmod_copper.utils.TagUtils.tag;
 
 public class GenericResources {
   public static final RuntimeResourcePack SERVER_PACK = RuntimeResourcePack.create(NAMESPACE + ":" + "data_pack");
@@ -31,6 +33,7 @@ public class GenericResources {
     SERVER_PACK.dump();
     CLIENT_PACK.dump();
   }
+
   public static void addItemModel(String textureName, String blockName){
     CLIENT_PACK.addData(
       new Identifier(NAMESPACE, "models/item/" + blockName+".json"),
@@ -46,8 +49,7 @@ public class GenericResources {
   }
 
   public static JTag createIngredientTag(List<Item> ingredients, String name){
-    return tag(ingredients.stream().map(Registry.ITEM::getId).collect(Collectors.toList()),
-      new Identifier(NAMESPACE, name));
+    return null;//TODO recipe fix here
   }
   public static void shaplessCrafting(Identifier item, JIngredients ingredients, int count){
     SERVER_PACK.addRecipe(item,

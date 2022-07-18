@@ -2,10 +2,7 @@ package net.fabricmc.wildmod_copper.blocks;
 
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Util;
@@ -16,17 +13,20 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-import static net.fabricmc.wildmod_copper.registry.Tags.CHARGEABLE_COPPER;
-import static net.fabricmc.wildmod_copper.registry.Tags.CONDUCTS_COPPER;
+import static net.fabricmc.wildmod_copper.registry.BlockTags.CHARGEABLE_COPPER;
+import static net.fabricmc.wildmod_copper.registry.BlockTags.CONDUCTS_COPPER;
 import static net.fabricmc.wildmod_copper.utils.PropertyUtils.charged;
 import static net.fabricmc.wildmod_copper.utils.PropertyUtils.waterlogged;
 import static net.fabricmc.wildmod_copper.utils.TagUtils.blockIsIn;
+import static net.minecraft.block.Block.dropStacks;
 import static net.minecraft.block.Blocks.*;
 
 public class WildCopper{
     public static final Vec3d[] COLORS;
     public static final IntProperty CHARGE = IntProperty.of("charge", 0, 15);
     public static final BooleanProperty WET = BooleanProperty.of("wet");
+    private static boolean placedAdjacent = false;
+
 
     public static final Map<Oxidizable.OxidationLevel, Set<Block>> byLevel = new HashMap<>();
 
@@ -102,6 +102,52 @@ public class WildCopper{
         return 0;
     }
 
+    public static void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos) {
+        if (!world.isClient) {
+            if (state.canPlaceAt(world, pos)) {
+                BlockState other = world.getBlockState(sourcePos);
+                placedAdjacent = other.isOf(WATER) || waterlogged(other) || blockIsIn(other.getBlock(), CONDUCTS_COPPER) || other.emitsRedstonePower();
+                update(world, pos, state);
+            } else {
+                dropStacks(state, world, pos);
+                world.removeBlock(pos, false);
+            }
+
+        }
+    }
+    public static int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
+        BlockState otherState = world.getBlockState(pos.offset(direction.getOpposite()));
+        BlockState otherState2 = world.getBlockState(pos);
+        Block other = otherState.getBlock();
+        Block other2 = otherState2.getBlock();
+        if (blockIsIn(other, CONDUCTS_COPPER) || blockIsIn(other, CHARGEABLE_COPPER)) {
+            return charged(state);
+        }
+        return 0;
+    }
+    public static void update(World world, BlockPos pos, BlockState state) {
+        int i = WildCopper.getReceivedRedstonePower(world, pos);
+        if (charged(state) != i) {
+            if (world.getBlockState(pos) == state) {
+                world.setBlockState(pos, state.with(CHARGE, i), 2);
+            }
+        }
+        if (placedAdjacent) {
+            boolean wet = checkIfWet(pos, world);
+            if (wet != state.get(WET)) {
+                world.setBlockState(pos, state.with(WET, wet), 2);
+            }
+            Set<BlockPos> set = Sets.newHashSet();
+            set.add(pos);
+            for (Direction direction : Direction.values()) {
+                set.add(pos.offset(direction));
+            }
+            for (BlockPos blockPos : set) {
+                world.updateNeighborsAlways(blockPos, state.getBlock());
+            }
+            placedAdjacent = false;
+        }
+    }
 
     static {
         COLORS = Util.make(new Vec3d[16], (vec3ds) -> {

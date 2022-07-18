@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.fabricmc.wildmod_copper.blocks.WildCopper.getRedstonePowerLevelForGates;
-import static net.fabricmc.wildmod_copper.registry.Tags.CHARGEABLE_COPPER;
-import static net.fabricmc.wildmod_copper.registry.Tags.CONDUCTS_COPPER;
+import static net.fabricmc.wildmod_copper.registry.BlockTags.CHARGEABLE_COPPER;
+import static net.fabricmc.wildmod_copper.registry.BlockTags.CONDUCTS_COPPER;
 import static net.minecraft.block.HorizontalFacingBlock.FACING;
 
 @Mixin(AbstractRedstoneGateBlock.class)

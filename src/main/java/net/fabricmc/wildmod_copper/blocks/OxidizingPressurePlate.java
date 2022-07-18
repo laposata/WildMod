@@ -123,8 +123,8 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock implement
                        : oxidized.toString().toLowerCase()+"_copper";
 
     addItemModel("minecraft:block/"+texture + "_inventory", getBlockName());
-    addBlockModel("minecraft:block/pressure_plate_up", texture, getBlockName());
-    addBlockModel("minecraft:block/pressure_plate_down", texture, getBlockName());
+    addBlockModel("minecraft:block/pressure_plate_up", "minecraft:block/"+texture, getBlockName());
+    addBlockModel("minecraft:block/pressure_plate_down","minecraft:block/"+ texture, getBlockName());
 
     new SimpleBlockResourceGenerator(SERVER_PACK).generateSimpleBlockLootTable(getIdentifier());
     crafting(
