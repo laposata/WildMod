@@ -1,11 +1,9 @@
-package net.fabricmc.wildmod_copper.registry;
+package net.fabricmc.wildmod_copper.data_providers.collections;
 
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.wildmod_copper.utils.TagUtils;
 import net.minecraft.block.Block;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
@@ -25,6 +23,11 @@ public class BlockTags {
   private static final Identifier conducts_copper_id = new Identifier(NAMESPACE, conducts_copper);
   public static TagKey<Block> CHARGEABLE_COPPER = TagUtils.createBlockTag(chargeable_copper_id);
   public static TagKey<Block> CONDUCTS_COPPER = TagUtils.createBlockTag(conducts_copper_id);
+  public static TagKey<Block> COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "coppers"));
+  public static TagKey<Block> EXPOSED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "exposed_coppers"));
+  public static TagKey<Block> WEATHERED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "weathered_coppers"));
+  public static TagKey<Block> OXIDIZED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "oxidized_coppers"));
+
   public static List<Block> chargeableCopper() {
     return Arrays.asList(
             COPPER_BLOCK,
@@ -67,5 +70,21 @@ public class BlockTags {
     return Arrays.asList(COPPER_PRESSURE_PLATE, EXPOSED_COPPER_PRESSURE_PLATE, WEATHERED_COPPER_PRESSURE_PLATE, OXIDIZED_COPPER_PRESSURE_PLATE);
   }
 
+  public static List<Block> coppers(){
+    return Arrays.asList(COPPER_BLOCK, WAXED_COPPER_BLOCK, CUT_COPPER, WAXED_CUT_COPPER);
+  }
+
+
+  public static List<Block> exposedCoppers(){
+    return Arrays.asList(EXPOSED_COPPER, WAXED_EXPOSED_COPPER, EXPOSED_CUT_COPPER, WAXED_EXPOSED_CUT_COPPER);
+  }
+
+  public static List<Block> weatheredCoppers(){
+    return Arrays.asList(WEATHERED_COPPER, WAXED_WEATHERED_COPPER, WEATHERED_CUT_COPPER, WAXED_WEATHERED_CUT_COPPER);
+  }
+
+  public static List<Block> oxidizedCoppers(){
+    return Arrays.asList(OXIDIZED_COPPER, WAXED_OXIDIZED_COPPER, OXIDIZED_CUT_COPPER, WAXED_OXIDIZED_CUT_COPPER);
+  }
 
 }

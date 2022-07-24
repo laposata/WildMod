@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.fabricmc.wildmod_copper.blocks.WildCopper.*;
 import static net.fabricmc.wildmod_copper.utils.PropertyUtils.charged;
@@ -23,6 +24,7 @@ import static net.fabricmc.wildmod_copper.utils.PropertyUtils.charged;
 @Mixin(OxidizableBlock.class)
 public class OxidizableMixin extends Block {
 
+  private final AtomicBoolean powerful = new AtomicBoolean(true);
   private OxidizableMixin(Settings settings) {
     super(settings);
   }
@@ -50,12 +52,12 @@ public class OxidizableMixin extends Block {
 
   @Override
   public boolean emitsRedstonePower(BlockState state) {
-    return true;
+    return powerful.get() && charged(state) != 0;
   }
 
   @Override
   public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-    return WildCopper.getWeakRedstonePower(state, world, pos, direction);
+    return  powerful.get() ? WildCopper.getWeakRedstonePower(state, world, pos, direction) : 0;
   }
 
   public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
@@ -63,15 +65,18 @@ public class OxidizableMixin extends Block {
   }
 
   public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-    WildCopper.neighborUpdate(state, world, pos, sourceBlock, sourcePos);
+    WildCopper.neighborUpdate(state, world, pos, sourceBlock, sourcePos, powerful, this);
   }
 
-  public BlockState getPlacementState(ItemPlacementContext ctx) {
-    int i = WildCopper.getReceivedRedstonePower(ctx.getWorld(), ctx.getBlockPos());
+  public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    WildCopper.onBlockAdded(state, world, pos, oldState, notify, this, powerful);
+  }
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+    int i = WildCopper.getReceivedRedstonePower(ctx.getWorld(), ctx.getBlockPos(), powerful);
     return getDefaultState().with(CHARGE, i).with(WET, checkIfWet(ctx.getBlockPos(), ctx.getWorld()));
   }
 
-  public void tryWetDegrade(BlockState state2, ServerWorld world, BlockPos pos, Random random) {
+  public void tryWetDegrade(BlockState state, ServerWorld world, BlockPos pos, Random random) {
     BlockPos blockPos;
     int l;
     int i = ((OxidizableBlock) (Object) this).getDegradationLevel().ordinal();
@@ -93,13 +98,14 @@ public class OxidizableMixin extends Block {
       ++matchedCopper;
     }
     float f = (float) (aboveCopper + 1) / (float) (aboveCopper + matchedCopper + 1);
-    float g = f * (float) Math.max((float) charged(state2) / 12, .9) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
+    float g = f * (float) Math.max((float) charged(state) / 12, .9) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
     if (random.nextFloat() < g) {
-      ((OxidizableBlock) (Object) this).getDegradationResult(state2).ifPresent(state -> world.setBlockState(pos, state));
+      ((OxidizableBlock) (Object) this).getDegradationResult(state).ifPresent(s -> world.setBlockState(pos, s));
+      WildCopper.update(world, pos, state, false, powerful, this);
     }
   }
 
-  public void tryDegrade(BlockState state2, ServerWorld world, BlockPos pos, Random random) {
+  public void tryDegrade(BlockState state, ServerWorld world, BlockPos pos, Random random) {
     BlockPos blockPos;
     int l;
     int i = ((OxidizableBlock) (Object) this).getDegradationLevel().ordinal();
@@ -126,9 +132,10 @@ public class OxidizableMixin extends Block {
       ++matchedCopper;
     }
     float f = (float) (aboveCopper - belowCopper + 1) / (float) (aboveCopper + matchedCopper + 1);
-    float g = f * Math.max((float) charged(state2) / 12, f) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
+    float g = f * Math.max((float) charged(state) / 12, f) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
     if (random.nextFloat() < g) {
-      ((OxidizableBlock) (Object) this).getDegradationResult(state2).ifPresent(state -> world.setBlockState(pos, state));
+      ((OxidizableBlock) (Object) this).getDegradationResult(state).ifPresent(s -> world.setBlockState(pos, s));
+      WildCopper.update(world, pos, state, false, powerful, this);
     }
   }
 
@@ -146,8 +153,9 @@ public class OxidizableMixin extends Block {
     }
     if (random.nextFloat() < f) {
       this.tryDegrade(state, world, pos, random);
-      WildCopper.update(world, pos, state);
     }
   }
+
+
 
 }

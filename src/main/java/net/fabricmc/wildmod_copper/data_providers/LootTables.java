@@ -2,21 +2,27 @@ package net.fabricmc.wildmod_copper.data_providers;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.context.LootContextType;
-import net.minecraft.util.Identifier;
+import net.fabricmc.wildmod_copper.data_providers.collections.BlockTags;
+import net.minecraft.block.Block;
 
-import java.util.function.BiConsumer;
+import java.util.List;
+
+import static net.fabricmc.wildmod_copper.registry.BlockRegistry.COPPER_BUTTON;
+import static net.fabricmc.wildmod_copper.registry.BlockRegistry.OXIDIZED_COPPER_BUTTON;
 
 public class LootTables extends FabricBlockLootTableProvider {
 
-    protected LootTables(FabricDataGenerator dataGenerator) {
+    public LootTables(FabricDataGenerator dataGenerator) {
         super(dataGenerator);
     }
 
     @Override
     protected void generateBlockLootTables() {
+        addDrop(BlockTags.buttons());
+        addDrop(BlockTags.plates());
+    }
 
+    private void addDrop(List<Block> blocks){
+        blocks.forEach(this::addDrop);
     }
 }
