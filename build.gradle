@@ -107,9 +107,17 @@ curseforge {
 			releaseType = 'alpha'
 			addGameVersion '1.19'
 
-			mainArtifact(jar) {
+			mainArtifact(remapJar) {
 				displayName = "WildMod Copper: $project.version"
 			}
+			afterEvaluate {
+				tasks.curseforge.dependsOn remapJar
+			}
+
+		}
+		options {
+			forgeGradleIntegration = false
 		}
 	}
 }
+

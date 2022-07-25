@@ -101,7 +101,7 @@ public class OxidizableMixin extends Block {
     float g = f * (float) Math.max((float) charged(state) / 12, .9) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
     if (random.nextFloat() < g) {
       ((OxidizableBlock) (Object) this).getDegradationResult(state).ifPresent(s -> world.setBlockState(pos, s));
-      WildCopper.update(world, pos, state, false, powerful, this);
+      WildCopper.update(world, pos, state, powerful, this);
     }
   }
 
@@ -135,7 +135,7 @@ public class OxidizableMixin extends Block {
     float g = f * Math.max((float) charged(state) / 12, f) * ((OxidizableBlock) (Object) this).getDegradationChanceMultiplier();
     if (random.nextFloat() < g) {
       ((OxidizableBlock) (Object) this).getDegradationResult(state).ifPresent(s -> world.setBlockState(pos, s));
-      WildCopper.update(world, pos, state, false, powerful, this);
+      WildCopper.update(world, pos, state, powerful, this);
     }
   }
 
