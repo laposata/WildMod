@@ -95,16 +95,21 @@ loom {
 }
 assemble.dependsOn runDatagen
 
-//curseforge {
-//	apiKey = System.getenv("apikey")
-//	project {
-//		id = '641024'
-//		changelog = 'Initial commit'
-//		releaseType = 'alpha'
-//		addGameVersion '1.19.2'
-//
-//		mainArtifact(jar) {
-//			displayName = "WildMod Copper: $project.version"
-//		}
-//	}
-//}
+curseforge {
+	if(!System.getenv().containsKey("apikey")){
+		System.out.println("Could not upload, api key not found")
+		return
+	} else {
+		apiKey = System.getenv("apikey")
+		project {
+			id = '641024'
+			changelog = 'Initial commit'
+			releaseType = 'alpha'
+			addGameVersion '1.19'
+
+			mainArtifact(jar) {
+				displayName = "WildMod Copper: $project.version"
+			}
+		}
+	}
+}

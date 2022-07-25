@@ -1,6 +1,7 @@
 package net.fabricmc.wildmod_copper.mixin;
 
 import net.fabricmc.wildmod_copper.imixin.ICountInventory;
+import net.fabricmc.wildmod_copper.utils.InventoryUtils;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
@@ -21,7 +22,7 @@ public class PlayerInventoryMixin implements ICountInventory {
     return combinedInventory.stream()
              .map(subInventory ->
                 subInventory.stream()
-                  .map(stack -> stack.getCount() * (64 / stack.getMaxCount()))
+                  .map(InventoryUtils::countBase64)
                   .reduce(0, Integer::sum)
               ).reduce(0, Integer::sum);
   }

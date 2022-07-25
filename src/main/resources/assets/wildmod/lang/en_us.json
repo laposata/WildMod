@@ -1,0 +1,10 @@
+{
+  "block.wildmod_copper.copper_pressure_plate": "Copper Pressure Plate",
+  "block.wildmod_copper.weathered_copper_pressure_plate": "Weathered Copper Pressure Plate",
+  "block.wildmod_copper.exposed_copper_pressure_plate": "Exposed Copper Pressure Plate",
+  "block.wildmod_copper.oxidized_copper_pressure_plate": "Oxidized Copper Pressure Plate",
+  "block.wildmod_copper.copper_button": "Copper Button",
+  "block.wildmod_copper.weathered_copper_button": "Weathered Copper Button",
+  "block.wildmod_copper.exposed_copper_button": "Exposed Copper Button",
+  "block.wildmod_copper.oxidized_copper_button": "Oxidized Copper Button"
+}

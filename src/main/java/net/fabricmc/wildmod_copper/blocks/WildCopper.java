@@ -109,10 +109,7 @@ public class WildCopper{
             if (state.canPlaceAt(world, pos)) {
                 BlockState other = world.getBlockState(sourcePos);
                 boolean placedAdjacent = sourceBlock.getDefaultState().isOf(WATER)
-                        || waterlogged(other)
-                        || blockIsIn(sourceBlock, CONDUCTS_COPPER)
-                        || blockIsIn(sourceBlock, CHARGEABLE_COPPER)
-                        || other.getBlock().emitsRedstonePower(other);
+                        || waterlogged(other);
                 update(world, pos, state, placedAdjacent, powerful, self);
             } else {
                 dropStacks(state, world, pos);
@@ -130,21 +127,21 @@ public class WildCopper{
         return 0;
     }
     public static void update(World world, BlockPos pos, BlockState state, boolean placedAdjacent, AtomicBoolean powerful, Block self) {
-        if (placedAdjacent) {
-            int i = WildCopper.getReceivedRedstonePower(world, pos, powerful);
-            if (charged(state) != i) {
-                if (world.getBlockState(pos) == state) {
-                    world.setBlockState(pos, state.with(CHARGE, i), 2);
-                }
-                Set<BlockPos> set = Sets.newHashSet();
-                set.add(pos);
-                for (Direction direction : Direction.values()) {
-                    set.add(pos.offset(direction));
-                }
-                for (BlockPos blockPos : set) {
-                    world.updateNeighborsAlways(blockPos, self);
-                }
+        int i = WildCopper.getReceivedRedstonePower(world, pos, powerful);
+        if (charged(state) != i) {
+            if (world.getBlockState(pos) == state) {
+                world.setBlockState(pos, state.with(CHARGE, i), 2);
             }
+            Set<BlockPos> set = Sets.newHashSet();
+            set.add(pos);
+            for (Direction direction : Direction.values()) {
+                set.add(pos.offset(direction));
+            }
+            for (BlockPos blockPos : set) {
+                world.updateNeighborsAlways(blockPos, self);
+            }
+        }
+        if (placedAdjacent) {
             boolean wet = checkIfWet(pos, world);
             if (wet != state.get(WET)) {
                 world.setBlockState(pos, state.with(WET, wet), 2);

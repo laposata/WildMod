@@ -6,6 +6,8 @@
   "mixins": [
     "AbstractButtonBlockMixin",
     "AbstractRedstoneGateMixin",
+    "AbstractHorseEntityMixin",
+    "VehicleInventoryMixin",
     "BlocksMixin",
     "OxidizableMixin",
     "PlayerInventoryMixin",
