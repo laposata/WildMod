@@ -2,6 +2,7 @@ package net.fabricmc.wildmod_copper.blocks;
 
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
@@ -10,6 +11,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +30,6 @@ public class WildCopper{
     public static final BooleanProperty WET = BooleanProperty.of("wet");
 
     public static final Map<Oxidizable.OxidationLevel, Set<Block>> byLevel = new HashMap<>();
-    private static Boolean powerful;
 
     public static void registerOxidizable(Block block, Oxidizable.OxidationLevel level){
         Set<Block> set = WildCopper.byLevel.getOrDefault(level, new HashSet<>());
@@ -107,7 +108,6 @@ public class WildCopper{
     public static void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, AtomicBoolean powerful, Block self) {
         if (!world.isClient) {
             if (state.canPlaceAt(world, pos)) {
-                BlockState other = world.getBlockState(sourcePos);
                 update(world, pos, state, powerful, self);
             } else {
                 dropStacks(state, world, pos);
@@ -116,10 +116,13 @@ public class WildCopper{
 
         }
     }
-    public static int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
+    public static int getWeakRedstonePower(BlockState state, BlockView world,
+                                           BlockPos pos, Direction direction, AtomicBoolean placedAdjacent){
         BlockState otherState = world.getBlockState(pos.offset(direction.getOpposite()));
         Block other = otherState.getBlock();
-        if (blockIsIn(other, CONDUCTS_COPPER) || blockIsIn(other, CHARGEABLE_COPPER)) {
+        if (blockIsIn(other, CONDUCTS_COPPER) || blockIsIn(other, CHARGEABLE_COPPER) ||
+                placedAdjacent.get()) {
+            placedAdjacent.set(false);
             return charged(state);
         }
         return 0;
@@ -130,7 +133,15 @@ public class WildCopper{
             if (world.getBlockState(pos) == state) {
                 world.setBlockState(pos, state.with(CHARGE, i), 2);
             }
+            updateAdjacentBlocks(pos, world, self);
         }
+        boolean wet = checkIfWet(pos, world);
+        if (wet != state.get(WET)) {
+            world.setBlockState(pos, state.with(WET, wet), 2);
+        }
+    }
+
+    private static void updateAdjacentBlocks(BlockPos pos, World world, Block self){
         Set<BlockPos> set = Sets.newHashSet();
         set.add(pos);
         for (Direction direction : Direction.values()) {
@@ -139,26 +150,7 @@ public class WildCopper{
         for (BlockPos blockPos : set) {
             world.updateNeighborsAlways(blockPos, self);
         }
-        boolean wet = checkIfWet(pos, world);
-        if (wet != state.get(WET)) {
-            world.setBlockState(pos, state.with(WET, wet), 2);
-        }
     }
-
-    public static void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify, Block self, AtomicBoolean powerful) {
-        if (!oldState.isOf(state.getBlock()) && !world.isClient) {
-            update(world, pos, state, powerful, self);
-            Iterator var6 = Arrays.stream(Direction.values()).iterator();
-
-            while(var6.hasNext()) {
-                Direction direction = (Direction)var6.next();
-                world.updateNeighborsAlways(pos.offset(direction), self);
-            }
-        }
-    }
-
-
-
     static {
         COLORS = Util.make(new Vec3d[16], (vec3ds) -> {
             for (int i = 0; i <= 15; ++i) {
@@ -171,4 +163,12 @@ public class WildCopper{
         });
     }
 
+    public static BlockState getStateForNeighborUpdate(Direction direction, BlockState neighborState,
+                                                       WorldAccess world, BlockPos pos,
+                                                       BlockPos neighborPos, AtomicBoolean placedAdjacent) {
+        if(blockIsIn(neighborState.getBlock(), CONDUCTS_COPPER)){
+            placedAdjacent.set(true);
+        }
+        return world.getBlockState(pos);
+    }
 }

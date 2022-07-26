@@ -10,6 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +26,8 @@ import static net.fabricmc.wildmod_copper.utils.PropertyUtils.charged;
 public class OxidizableMixin extends Block {
 
   private final AtomicBoolean powerful = new AtomicBoolean(true);
+  private final AtomicBoolean placedAdjacent = new AtomicBoolean(false);
+
   private OxidizableMixin(Settings settings) {
     super(settings);
   }
@@ -57,7 +60,7 @@ public class OxidizableMixin extends Block {
 
   @Override
   public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-    return  powerful.get() ? WildCopper.getWeakRedstonePower(state, world, pos, direction) : 0;
+    return WildCopper.getWeakRedstonePower(state, world, pos, direction, placedAdjacent);
   }
 
   public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
@@ -68,10 +71,7 @@ public class OxidizableMixin extends Block {
     WildCopper.neighborUpdate(state, world, pos, sourceBlock, sourcePos, powerful, this);
   }
 
-  public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-    WildCopper.onBlockAdded(state, world, pos, oldState, notify, this, powerful);
-  }
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
+  public BlockState getPlacementState(ItemPlacementContext ctx) {
     int i = WildCopper.getReceivedRedstonePower(ctx.getWorld(), ctx.getBlockPos(), powerful);
     return getDefaultState().with(CHARGE, i).with(WET, checkIfWet(ctx.getBlockPos(), ctx.getWorld()));
   }
@@ -156,6 +156,9 @@ public class OxidizableMixin extends Block {
     }
   }
 
+  public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    return WildCopper.getStateForNeighborUpdate(direction, neighborState, world, pos, neighborPos, placedAdjacent);
+  }
 
 
 }
