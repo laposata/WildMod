@@ -12,8 +12,7 @@
     "OxidizableMixin",
     "PlayerInventoryMixin",
     "RedstoneWireMixin",
-    "SimpleInventoryMixin",
-    "ItemPlacementContextMixin"
+    "SimpleInventoryMixin"
   ],
   "client": [
   ],

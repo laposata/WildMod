@@ -103,8 +103,8 @@ curseforge {
 		apiKey = System.getenv("apikey")
 		project {
 			id = '641024'
-			changelog = 'Initial commit'
-			releaseType = 'alpha'
+			changelog = "added logo"
+			releaseType = 'release'
 			addGameVersion '1.19'
 
 			mainArtifact(remapJar) {
