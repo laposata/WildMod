@@ -12,7 +12,7 @@
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/laposata/WildMod"
   },
-
+  "icon": "assets/wildmod/DreamTea.png",
   "environment": "*",
   "entrypoints": {
     "main": [
