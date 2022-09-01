@@ -5,14 +5,15 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AbstractButtonBlockMixin",
-    "AbstractRedstoneGateMixin",
     "AbstractHorseEntityMixin",
-    "VehicleInventoryMixin",
+    "AbstractRedstoneGateMixin",
+    "ArmorStandEntityMixin",
     "BlocksMixin",
     "OxidizableMixin",
     "PlayerInventoryMixin",
     "RedstoneWireMixin",
-    "SimpleInventoryMixin"
+    "SimpleInventoryMixin",
+    "VehicleInventoryMixin"
   ],
   "client": [
   ],

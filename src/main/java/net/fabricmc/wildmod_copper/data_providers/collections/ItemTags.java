@@ -12,4 +12,6 @@ public class ItemTags {
     public static TagKey<Item> EXPOSED_COPPERS_ITEM = TagUtils.createItemTag(new Identifier(NAMESPACE, "exposed_coppers_item"));
     public static TagKey<Item> WEATHERED_COPPERS_ITEM = TagUtils.createItemTag(new Identifier(NAMESPACE, "weathered_coppers_item"));
     public static TagKey<Item> OXIDIZED_COPPERS_ITEM = TagUtils.createItemTag(new Identifier(NAMESPACE, "oxidized_coppers_item"));
+    public static TagKey<Item> INVENTORY_ITEMS = TagUtils.createItemTag(new Identifier(NAMESPACE, "inventory_items"));
+
 }

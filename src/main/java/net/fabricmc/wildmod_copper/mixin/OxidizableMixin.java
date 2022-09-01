@@ -157,7 +157,8 @@ public class OxidizableMixin extends Block {
   }
 
   public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-    return WildCopper.getStateForNeighborUpdate(direction, neighborState, world, pos, neighborPos, placedAdjacent);
+      WildCopper.getStateForNeighborUpdate(direction, neighborState, world, pos, neighborPos, placedAdjacent);
+      return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
   }
 
 

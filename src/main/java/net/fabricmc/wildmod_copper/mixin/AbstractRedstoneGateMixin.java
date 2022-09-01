@@ -23,7 +23,7 @@ public class AbstractRedstoneGateMixin {
 
   @Inject(at = @At("RETURN"), method = "getPower", cancellable = true)
   public void getPowerFromCopper(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Integer> cir) {
-    if (cir.getReturnValue() < 15 && TagUtils.blockIsIn(state.getBlock(), CONDUCTS_COPPER)) {
+    if (TagUtils.blockIsIn(state.getBlock(), CONDUCTS_COPPER)) {
       Direction direction = state.get(FACING);
       BlockPos blockPos = pos.offset(direction);
       BlockState blockState = world.getBlockState(blockPos);

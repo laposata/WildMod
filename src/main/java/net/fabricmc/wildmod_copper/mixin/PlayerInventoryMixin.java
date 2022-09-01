@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mixin(PlayerInventory.class)
 public class PlayerInventoryMixin implements ICountInventory {
@@ -18,12 +20,9 @@ public class PlayerInventoryMixin implements ICountInventory {
   private List<DefaultedList<ItemStack>> combinedInventory;
 
   @Override
-  public int getTotalInventory() {
+  public List<ItemStack> getTotalInventory() {
     return combinedInventory.stream()
-             .map(subInventory ->
-                subInventory.stream()
-                  .map(InventoryUtils::countBase64)
-                  .reduce(0, Integer::sum)
-              ).reduce(0, Integer::sum);
+             .flatMap(Collection::stream)
+      .collect(Collectors.toList());
   }
 }

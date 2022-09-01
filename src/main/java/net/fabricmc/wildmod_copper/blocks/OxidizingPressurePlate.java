@@ -1,17 +1,30 @@
 package net.fabricmc.wildmod_copper.blocks;
 
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.fabricmc.wildmod_copper.data_providers.collections.ItemTags;
 import net.fabricmc.wildmod_copper.imixin.ICountInventory;
+import net.fabricmc.wildmod_copper.utils.InventoryUtils;
 import net.minecraft.block.Oxidizable;
+import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.WeightedPressurePlateBlock;
+import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.InventoryOwner;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.Saddleable;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.VehicleInventory;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -22,11 +35,11 @@ import java.util.Locale;
 
 import static net.fabricmc.wildmod_copper.WildModCopper.NAMESPACE;
 import static net.minecraft.block.Oxidizable.OxidationLevel.UNAFFECTED;
+import static net.minecraft.block.entity.ShulkerBoxBlockEntity.ITEMS_KEY;
 
 public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
 
   private final Oxidizable.OxidationLevel oxidized;
-
   private final int INVENTORY_COUNT = 37 * 64;
 
   private final int MAX_RSS;
@@ -50,10 +63,7 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
 
   @Override
   protected int getRedstoneOutput(World world, BlockPos pos) {
-    List<Entity> entities = world.getNonSpectatingEntities(Entity.class, BOX.offset(pos))
-                              .stream()
-                              .filter(entity -> entity.isLiving() || entity.hasPassengers())
-                              .toList();
+    List<Entity> entities = world.getOtherEntities(null, BOX.offset(pos));
     if(entities.size() == 0){
       return 0;
     }
@@ -78,13 +88,15 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
     if(!counted.contains(entity)){
       counted.add(entity);
       if(entity instanceof PlayerEntity player){
-        invCount = ((ICountInventory)player.getInventory()).getTotalInventory();
+        invCount = ((ICountInventory)player.getInventory()).getTotalInventoryCount();
       } else if(entity instanceof InventoryOwner collector){
-        invCount = ((ICountInventory)collector.getInventory()).getTotalInventory();
+        invCount = ((ICountInventory)collector.getInventory()).getTotalInventoryCount();
       } else if(entity instanceof VehicleInventory vehicle){
-        invCount = ((ICountInventory)vehicle).getTotalInventory();
+        invCount = ((ICountInventory)vehicle).getTotalInventoryCount();
       } else if(entity instanceof AbstractHorseEntity vehicle){
-        invCount = ((ICountInventory)vehicle).getTotalInventory();
+        invCount = ((ICountInventory)vehicle).getTotalInventoryCount();
+      } else if(entity instanceof ArmorStandEntity vehicle){
+        invCount = ((ICountInventory)vehicle).getTotalInventoryCount();
       } else if(entity instanceof MobEntity mob){
         for(ItemStack stack: mob.getItemsHand()){
           invCount += stack.getCount() * (64 / stack.getMaxCount());
@@ -96,6 +108,10 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
           if(((Saddleable)entity).isSaddled()){
             invCount += 1;
           }
+        }
+      } else if (entity instanceof ItemEntity item) {
+        if(item.getStack().isIn(ItemTags.INVENTORY_ITEMS) && item.getStack() != null && item.getStack().getNbt() != null){
+          invCount = InventoryUtils.getTotalItemCount(ICountInventory.burstInventoryContainingItems(item.getStack(), false));
         }
       }
     }
@@ -115,5 +131,6 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
   public String getBlockName(){
     return (oxidized == UNAFFECTED ? "" : oxidized.toString().toLowerCase(Locale.ROOT) + "_" ) + "copper_pressure_plate";
   }
+
 
 }

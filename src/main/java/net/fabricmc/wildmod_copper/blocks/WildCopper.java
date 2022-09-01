@@ -2,6 +2,7 @@ package net.fabricmc.wildmod_copper.blocks;
 
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
+import net.minecraft.block.enums.RailShape;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.state.property.BooleanProperty;
@@ -107,13 +108,15 @@ public class WildCopper{
 
     public static void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, AtomicBoolean powerful, Block self) {
         if (!world.isClient) {
-            if (state.canPlaceAt(world, pos)) {
-                update(world, pos, state, powerful, self);
-            } else {
-                dropStacks(state, world, pos);
-                world.removeBlock(pos, false);
+            if (!world.getBlockState(pos).isIn(CHARGEABLE_COPPER) && !world.getBlockState(pos).isIn(CONDUCTS_COPPER)) {
+                return;
             }
-
+            int bl2 = getReceivedRedstonePower(world, pos, powerful);
+            int bl = state.get(CHARGE);
+            if (bl2 != bl) {
+                powerful.set(false);
+                world.setBlockState(pos, state.with(CHARGE, bl2), Block.NOTIFY_ALL);
+            }
         }
     }
     public static int getWeakRedstonePower(BlockState state, BlockView world,
@@ -140,12 +143,20 @@ public class WildCopper{
             world.setBlockState(pos, state.with(WET, wet), 2);
         }
     }
-
     private static void updateAdjacentBlocks(BlockPos pos, World world, Block self){
+        updateAdjacentBlocks(pos, world, self, null);
+    }
+    private static void updateAdjacentBlocks(BlockPos pos, World world, Block self, List<BlockPos> exclude){
         Set<BlockPos> set = Sets.newHashSet();
-        set.add(pos);
+        if(exclude != null && !exclude.contains(pos)) {
+            set.add(pos);
+        }
         for (Direction direction : Direction.values()) {
-            set.add(pos.offset(direction));
+            BlockPos dest = pos.offset(direction);
+            if(exclude != null && !exclude.contains(dest)) {
+                set.add(dest);
+            }
+            set.add(dest);
         }
         for (BlockPos blockPos : set) {
             world.updateNeighborsAlways(blockPos, self);
@@ -163,12 +174,11 @@ public class WildCopper{
         });
     }
 
-    public static BlockState getStateForNeighborUpdate(Direction direction, BlockState neighborState,
+    public static void getStateForNeighborUpdate(Direction direction, BlockState neighborState,
                                                        WorldAccess world, BlockPos pos,
                                                        BlockPos neighborPos, AtomicBoolean placedAdjacent) {
         if(blockIsIn(neighborState.getBlock(), CONDUCTS_COPPER)){
             placedAdjacent.set(true);
         }
-        return world.getBlockState(pos);
     }
 }

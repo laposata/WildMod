@@ -12,7 +12,7 @@
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/laposata/WildMod"
   },
-  "icon": "assets/wildmod/DreamTea.png",
+  "icon": "DreamTea.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -28,10 +28,7 @@
   "depends": {
     "fabricloader": ">=0.14.6",
     "fabric": "*",
-    "minecraft": "~1.19",
+    "minecraft": "~1.19+",
     "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }
