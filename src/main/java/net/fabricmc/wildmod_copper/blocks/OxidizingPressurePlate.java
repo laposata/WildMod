@@ -98,7 +98,7 @@ public class OxidizingPressurePlate extends WeightedPressurePlateBlock {
       } else if(entity instanceof ArmorStandEntity vehicle){
         invCount = ((ICountInventory)vehicle).getTotalInventoryCount();
       } else if(entity instanceof MobEntity mob){
-        for(ItemStack stack: mob.getItemsHand()){
+        for(ItemStack stack: mob.getHandItems()){
           invCount += stack.getCount() * (64 / stack.getMaxCount());
         }
         for(ItemStack stack: mob.getArmorItems()){
