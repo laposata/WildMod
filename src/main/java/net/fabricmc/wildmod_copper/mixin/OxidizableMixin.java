@@ -1,6 +1,7 @@
 package net.fabricmc.wildmod_copper.mixin;
 
 import net.fabricmc.wildmod_copper.blocks.WildCopper;
+import net.fabricmc.wildmod_copper.utils.PropertyUtils;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
@@ -45,7 +46,7 @@ public class OxidizableMixin extends Block {
 
   @Override
   public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-    int i = state.get(CHARGE);
+    int i = PropertyUtils.charged(state);
     if (i != 0) {
       for (Direction direction : Direction.Type.HORIZONTAL) {
         WildCopper.addPoweredParticles(world, random, pos, WildCopper.COLORS[i], direction, Direction.UP, -0.5F, 0.5F);

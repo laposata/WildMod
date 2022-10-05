@@ -1,6 +1,7 @@
 package net.fabricmc.wildmod_copper.blocks;
 
 import com.google.common.collect.Sets;
+import net.fabricmc.wildmod_copper.utils.PropertyUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.fluid.Fluids;
@@ -112,7 +113,7 @@ public class WildCopper{
                 return;
             }
             int bl2 = getReceivedRedstonePower(world, pos, powerful);
-            int bl = state.get(CHARGE);
+            int bl = PropertyUtils.charged(state);
             if (bl2 != bl) {
                 powerful.set(false);
                 world.setBlockState(pos, state.with(CHARGE, bl2), Block.NOTIFY_ALL);
