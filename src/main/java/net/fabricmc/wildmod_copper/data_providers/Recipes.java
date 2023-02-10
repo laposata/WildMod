@@ -3,16 +3,20 @@ package net.fabricmc.wildmod_copper.data_providers;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.wildmod_copper.data_providers.collections.BlockTags;
+import net.fabricmc.wildmod_copper.data_providers.utils.LanternGenerator;
 import net.fabricmc.wildmod_copper.utils.resource.generators.RecipeUtils;
+import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.SingleItemRecipeJsonBuilder;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import java.util.function.Consumer;
 
 import static net.fabricmc.wildmod_copper.data_providers.collections.ItemTags.*;
 import static net.fabricmc.wildmod_copper.registry.BlockRegistry.*;
+import static net.fabricmc.wildmod_copper.registry.ItemRegistry.COPPER_NUGGET;
 import static net.minecraft.block.Blocks.*;
 
 public class Recipes extends FabricRecipeProvider {
@@ -25,8 +29,14 @@ public class Recipes extends FabricRecipeProvider {
         stoneCutterRecipe(exporter);
         buttonCrafting(exporter);
         plateCrafting(exporter);
-    }
+        LanternGenerator.copperLanternRecipe(exporter);
 
+        RecipeProvider.offerReversibleCompactingRecipesWithCompactingRecipeGroup(exporter,
+                COPPER_NUGGET,
+                Items.COPPER_INGOT,
+                "copper_ingot_from_nuggets",
+                "copper_ingot");
+    }
     public void stoneCutterRecipe(Consumer<RecipeJsonProvider> exporter){
         SingleItemRecipeJsonBuilder.createStonecutting(
                 Ingredient.fromTag(COPPERS_ITEM),

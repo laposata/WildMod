@@ -14,9 +14,7 @@ import static net.fabricmc.wildmod_copper.WildModCopper.NAMESPACE;
 import static net.fabricmc.wildmod_copper.data_providers.collections.BlockTags.*;
 import static net.fabricmc.wildmod_copper.data_providers.collections.ItemTags.*;
 import static net.fabricmc.wildmod_copper.utils.TagUtils.itemsFromBlocks;
-import static net.minecraft.tag.BlockTags.BUTTONS;
-import static net.minecraft.tag.BlockTags.PRESSURE_PLATES;
-import static net.minecraft.tag.BlockTags.SHULKER_BOXES;
+import static net.minecraft.tag.BlockTags.*;
 
 public class Tags {
     public static class Blocks extends FabricTagProvider.BlockTagProvider{
@@ -35,6 +33,9 @@ public class Tags {
             getOrCreateTagBuilder(EXPOSED_COPPERS).add(BlockTags.exposedCoppers().toArray(Block[]::new));
             getOrCreateTagBuilder(WEATHERED_COPPERS).add(BlockTags.weatheredCoppers().toArray(Block[]::new));
             getOrCreateTagBuilder(OXIDIZED_COPPERS).add(BlockTags.oxidizedCoppers().toArray(Block[]::new));
+            getOrCreateTagBuilder(NEEDS_IRON_TOOL).add(BlockTags.newBlocks().toArray(Block[]::new));
+            getOrCreateTagBuilder(PICKAXE_MINEABLE).add(BlockTags.newBlocks().toArray(Block[]::new));
+            getOrCreateTagBuilder(FUZES).add(BlockTags.fuses().toArray(Block[]::new));
         }
     }
     public static class Items extends FabricTagProvider.ItemTagProvider{

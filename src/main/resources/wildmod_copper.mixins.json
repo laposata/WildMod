@@ -13,7 +13,8 @@
     "PlayerInventoryMixin",
     "RedstoneWireMixin",
     "SimpleInventoryMixin",
-    "VehicleInventoryMixin"
+    "VehicleInventoryMixin",
+    "WorldMixin"
   ],
   "client": [
   ],

@@ -72,6 +72,11 @@ public class OxidizableMixin extends Block {
     WildCopper.neighborUpdate(state, world, pos, sourceBlock, sourcePos, powerful, this);
   }
 
+  public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    WildCopper.getStateForNeighborUpdate(direction, neighborState, world, pos, neighborPos, placedAdjacent);
+    return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+  }
+
   public BlockState getPlacementState(ItemPlacementContext ctx) {
     int i = WildCopper.getReceivedRedstonePower(ctx.getWorld(), ctx.getBlockPos(), powerful);
     return getDefaultState().with(CHARGE, i).with(WET, checkIfWet(ctx.getBlockPos(), ctx.getWorld()));
@@ -157,10 +162,6 @@ public class OxidizableMixin extends Block {
     }
   }
 
-  public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-      WildCopper.getStateForNeighborUpdate(direction, neighborState, world, pos, neighborPos, placedAdjacent);
-      return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-  }
 
 
 }

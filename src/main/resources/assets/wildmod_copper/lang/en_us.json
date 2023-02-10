@@ -6,5 +6,8 @@
   "block.wildmod_copper.copper_button": "Copper Button",
   "block.wildmod_copper.weathered_copper_button": "Weathered Copper Button",
   "block.wildmod_copper.exposed_copper_button": "Exposed Copper Button",
-  "block.wildmod_copper.oxidized_copper_button": "Oxidized Copper Button"
+  "block.wildmod_copper.copper_fuse_block": "Copper Fuse Block",
+  "block.wildmod_copper.exposed_fuse_block": "Exposed Fuse Block",
+  "block.wildmod_copper.weather_fuse_block": "Weathered Fuse Block",
+  "block.wildmod_copper.oxidized_fuse_block": "Oxidized Fuse Block"
 }

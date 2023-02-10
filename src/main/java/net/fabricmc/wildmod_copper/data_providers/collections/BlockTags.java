@@ -9,6 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,28 @@ public class BlockTags {
   public static TagKey<Block> EXPOSED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "exposed_coppers"));
   public static TagKey<Block> WEATHERED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "weathered_coppers"));
   public static TagKey<Block> OXIDIZED_COPPERS = TagUtils.createBlockTag(new Identifier(NAMESPACE, "oxidized_coppers"));
+  public static TagKey<Block> FUZES = TagUtils.createBlockTag(new Identifier(NAMESPACE, "fuses"));
 
+  public static List<Block> newBlocks(){
+    ArrayList<Block> newBlocks =  new ArrayList<>();
+    newBlocks.addAll(buttons());
+    newBlocks.addAll(plates());
+    newBlocks.add(COPPER_LANTERN);
+    newBlocks.add(FUZE_BLOCK);
+    newBlocks.add(EXPOSED_FUZE_BLOCK);
+    newBlocks.add(WEATHERED_FUZE_BLOCK);
+    newBlocks.add(OXIDIZED_FUZE_BLOCK);
+    return newBlocks;
+  }
+
+  public static List<Block> fuses(){
+    return Arrays.asList(
+            FUZE_BLOCK,
+            EXPOSED_FUZE_BLOCK,
+            WEATHERED_FUZE_BLOCK,
+            OXIDIZED_FUZE_BLOCK
+    );
+  }
   public static List<Block> chargeableCopper() {
     return Arrays.asList(
             COPPER_BLOCK,
@@ -61,8 +83,14 @@ public class BlockTags {
         STICKY_PISTON,
         ACTIVATOR_RAIL,
         POWERED_RAIL,
+        COPPER_LANTERN,
+        FUZE_BLOCK,
+        EXPOSED_FUZE_BLOCK,
+        WEATHERED_FUZE_BLOCK,
+        OXIDIZED_FUZE_BLOCK,
         TNT);
   }
+
 
   public static List<Block> buttons(){
     return Arrays.asList(EXPOSED_COPPER_BUTTON, COPPER_BUTTON, WEATHERED_COPPER_BUTTON, OXIDIZED_COPPER_BUTTON);
